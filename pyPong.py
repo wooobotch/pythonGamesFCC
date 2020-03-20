@@ -32,22 +32,62 @@ paddle_b = turtle.Turtle()
 paddle_b.speed(0)
 paddle_b.shape("square")
 paddle_b.color("white")
-paddle_a.shapesize(stretch_wid = 5, stretch_len = 1)
-paddle_a.penup()
-paddle_a.goto(350, 0)
+paddle_b.shapesize(stretch_wid = 5, stretch_len = 1)
+paddle_b.penup()
+paddle_b.goto(350, 0)
 
 # Ball
-paddle_a = turtle.Turtle()
-paddle_a.speed(0)
-paddle_a.shape("square")
-paddle_a.color("white")
+bola = turtle.Turtle()
+bola.speed(0)
+bola.shape("square")
+bola.color("white")
 # No resizing, it's fine to keep de square for the ball shape
-paddle_a.penup()
-paddle_a.goto(0, 0)
+bola.penup()
+bola.goto(0, 0)
+bola.dx = 2
+bola.dy = 2
+
+# Functions
+# moving paddles
+def paddle_a_up():
+    y = paddle_a.ycor()
+    # ycor() is a Turtle method
+    y += 20
+    paddle_a.sety(y)
+
+def paddle_a_down():
+    y = paddle_a.ycor()
+    y -= 20
+    paddle_a.sety(y)
+
+def paddle_b_up():
+    y = paddle_b.ycor()
+    y += 20
+    paddle_b.sety(y)
+
+def paddle_b_down():
+    y = paddle_b.ycor()
+    y -= 20
+    paddle_b.sety(y)
+
+
+# Keyboard Bindings
+# In order to call the funtions created we need to read keyboard input
+ventana.listen()
+ventana.onkeypress(paddle_a_up, "w")
+# It listens to lower case w
+ventana.onkeypress(paddle_a_down, "s")
+# Arrows must be capitalized
+ventana.onkeypress(paddle_b_up, "Up")
+ventana.onkeypress(paddle_b_down, "Down")
 
 #main loop
-while true:
+while True:
     ventana.update()
 
+    # Some moving
+    bola.setx(bola.xcor() + bola.dx)
+    bola.sety(bola.ycor() + bola.dy)
 
-#video 00:04:22
+
+#video 00:19:38
