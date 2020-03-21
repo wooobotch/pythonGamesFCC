@@ -3,6 +3,8 @@
 # By @AbrahamChalave
 
 import turtle
+import os #This works for linux and mac, swap comments between this line and the following to make it work for windows
+#import.winsond
 
 ventana = turtle.Screen()
 ventana.title("Pong by @AbrahamChalave")
@@ -96,6 +98,7 @@ ventana.onkeypress(paddle_b_down, "Down")
 
 #main loop
 while True:
+    ventana.delay(500)
     ventana.update()
 
     # Some moving
@@ -111,9 +114,12 @@ while True:
         bola.sety(290)
         bola.dy *= -1
         # The (-1) factor reverts the direction of the ball
+        os.system("aplay bounce.wav&") #This works for linux, for windows uncomment the following
+#        winsound.Playsound("bounce.wav", winsound.SND_ASYNC)
     if bola.ycor() < -290:
         bola.sety(-290)
         bola.dy *= -1
+        os.system("aplay bounce.wav&")
 
     # Right and Left limits (goals), then goes back to the center
     if bola.xcor() > 390:
@@ -137,9 +143,12 @@ while True:
     if (bola.xcor() > 340 and bola.xcor() < 350) and (bola.ycor() < paddle_b.ycor() + 40 and bola.ycor() > paddle_b.ycor() -40):
         bola.setx(340)
         bola.dx *= -1
+        os.system("aplay bounce.wav&")
     # Left paddle
     if (bola.xcor() < -340 and bola.xcor() > -350) and (bola.ycor() < paddle_a.ycor() + 40 and bola.ycor() > paddle_a.ycor() -40):
         bola.setx(-340)
         bola.dx *= -1
+        os.system("aplay bounce.wav&")
 
-#video 00:39:00
+
+# That's it. The concepts are covered, it doesn't work the same for every computer, so i added delay() calls
