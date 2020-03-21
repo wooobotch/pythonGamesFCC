@@ -89,5 +89,36 @@ while True:
     bola.setx(bola.xcor() + bola.dx)
     bola.sety(bola.ycor() + bola.dy)
 
+    # It's time to prevent things from going out of the window
+    # keeping in mind the size of the ball and the distances
+    # from the center of the window
 
-#video 00:19:38
+    # Top and bottom limits
+    if bola.ycor() > 290:
+        bola.sety(290)
+        bola.dy *= -1
+        # The (-1) factor reverts the direction of the ball
+    if bola.ycor() < -290:
+        bola.sety(-290)
+        bola.dy *= -1
+
+    # Right and Left limits (goals), then goes back to the center
+    if bola.xcor() > 390:
+        bola.goto(0, 0)
+        bola.dx *= -1
+
+    if bola.xcor() < -390:
+        bola.goto(0, 0)
+        bola.dx *= -1
+
+    # Collisions sections
+    # Right paddle
+    if (bola.xcor() > 340 and bola.xcor() < 350) and (bola.ycor() < paddle_b.ycor() + 40 and bola.ycor() > paddle_b.ycor() -40):
+        bola.setx(340)
+        bola.dx *= -1
+    # Left paddle
+    if (bola.xcor() < -340 and bola.xcor() > -350) and (bola.ycor() < paddle_a.ycor() + 40 and bola.ycor() > paddle_a.ycor() -40):
+        bola.setx(-340)
+        bola.dx *= -1
+
+#video 00:32:10
