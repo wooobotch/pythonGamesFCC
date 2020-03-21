@@ -10,6 +10,10 @@ ventana.bgcolor("black")
 ventana.setup(width = 800, height = 600)
 ventana.tracer(0)
 
+# Puntajes
+score_a = 0
+score_b = 0
+
 # Paddles and Ball
 # Creating instances and positioning
 
@@ -17,7 +21,7 @@ ventana.tracer(0)
 paddle_a = turtle.Turtle()
 paddle_a.speed(0)
 paddle_a.shape("square")
-paddle_a.color("white")
+paddle_a.color("red")
 # Since I picked square for the shape
 #it's got to be reshaped in order to look more like a paddle
 paddle_a.shapesize(stretch_wid = 5, stretch_len = 1)
@@ -31,7 +35,7 @@ paddle_a.goto(-350, 0)
 paddle_b = turtle.Turtle()
 paddle_b.speed(0)
 paddle_b.shape("square")
-paddle_b.color("white")
+paddle_b.color("blue")
 paddle_b.shapesize(stretch_wid = 5, stretch_len = 1)
 paddle_b.penup()
 paddle_b.goto(350, 0)
@@ -46,6 +50,15 @@ bola.penup()
 bola.goto(0, 0)
 bola.dx = 2
 bola.dy = 2
+
+# Scoring
+marcador = turtle.Turtle()
+marcador.speed(0)
+marcador.color("white")
+marcador.penup()
+marcador.hideturtle()
+marcador.goto(0, 260)
+marcador.write("Red Player: 0 - Blue Player: 0", align = "center", font = ("Courier", 24, "normal"))
 
 # Functions
 # moving paddles
@@ -106,10 +119,18 @@ while True:
     if bola.xcor() > 390:
         bola.goto(0, 0)
         bola.dx *= -1
+        score_a += 1
+        marcador.clear()
+        marcador.write("Red Player: {} - Blue Player: {}".format(score_a, score_b), align = "center", font = ("Courier", 24, "normal"))
+
 
     if bola.xcor() < -390:
         bola.goto(0, 0)
         bola.dx *= -1
+        score_b += 1
+        marcador.clear()
+        marcador.write("Red Player: {} - Blue Player: {}".format(score_a, score_b), align = "center", font = ("Courier", 24, "normal"))
+
 
     # Collisions sections
     # Right paddle
@@ -121,4 +142,4 @@ while True:
         bola.setx(-340)
         bola.dx *= -1
 
-#video 00:32:10
+#video 00:39:00
