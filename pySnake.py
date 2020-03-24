@@ -22,11 +22,61 @@ class cubo(object):
 
 
 class snake(object):
+    #A list for the blocks (cubo) in the body; a dictionary for the turns
+    cuerpo = []
+    vueltas = {}
     def __init__(self, color, pos):
-        pass
+        self.color = color
+        self.head = cubo(pos)
+        self.cuerpo.append(self.head)
+        #Now the directions: dirnx and dirny are the directios in which the snake moves
+        self.dirnx = 0
+        slef.dirny = 1
 
     def move(self):
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            keys = pygame.key.get_presses()
+            for key in keys:
+                if keys[pygame.K_LEFT]:
+                    self.dirnx = -1
+                    slef.dirny = 0
+                    self.vueltas[self.head.pos[:]] = [self.dirnx, self.dinry]
+                elif keys[pygame.K_RIGHT]:
+                    self.dirnx = 1
+                    slef.dirny = 0
+                    self.vueltas[self.head.pos[:]] = [self.dirnx, self.dinry]
+                elif keys[pygame.K_UP]:
+                    self.dirnx = 0
+                    slef.dirny = -1
+                    self.vueltas[self.head.pos[:]] = [self.dirnx, self.dinry]
+                elif keys[pygame.K_DOWN]:
+                    self.dirnx = 0
+                    slef.dirny = 1
+                    self.vueltas[self.head.pos[:]] = [self.dirnx, self.dinry]
+                    #For every turn we save in a dictionary the position and the direction in which the snake turned
+
+            #The next block iterates over the snake's body, moving each cube individually and removing the last one
+            # in order to prevent the snake from increasing it's length
+            for i, c in enumerate(self.cuerpo)
+                p = c.pos[:]
+                if p in self.vueltas:
+                    vuelta = self.vueltas[p]
+                    c.move(vuelta[0], vuelta[1])
+                    if i == len(self.cuerpo) - 1:
+                        self.vueltas.pop(p)
+                else:
+                    if c.dirnx == -1 and c.pos[0] <= 0:
+                        c.pos = (c.rows - 1, c.pos[1])
+                    elif c.dirnx == 1 and c.pos[0] >= c.rows - 1:
+                        c.pos = (c.pos[1], 0)
+                    elif c.dirnx == 1 and c.pos[1] >= c.rows - 1:
+                        c.pos = (c.pos[0], 0)
+                    elif c.dirnx == -1 and c.pos[1] <= 0:
+                        c.pos = (c.pos[1], c.rows - 1)
+                    else:
+                        c.move(c.dirnx, c.dirny)
 
     def reset(self, pos):
         pass
