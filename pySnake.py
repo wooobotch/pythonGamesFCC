@@ -9,17 +9,32 @@ import tkinter as tk
 from tkinter import messagebox
 
 class cubo(object):
-    filas = 0
-    w = 0
-    def __init__(self, sart, dirnx = 1, dirny = 0, color=(255,0,0)):
-        pass
+    filas = 20
+    w = 500
+    def __init__(self, start, dirnx = 1, dirny = 0, color=(255,0,0)):
+        self.pos = start
+        self.dirnx = 1
+        self.dirny = 0
+        self.color = color
 
     def move(self, dirnx, dirny):
-        pass
+        self.dirnx = dirnx
+        self.dirny = dirny
+        self.pos(self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw(self, superf, eyes = False):
-        pass
+        dis = self.w // self.rows
+        i = self.pos[0]
+        j = self.pos[1]
 
+        pygame.draw.rect(superf, self.color, (i * dis+1, j * dis+1, dis-2, dis-2))
+        if eyes:
+            cent = dis//2
+            rad = 3
+            circleMiddle = (i * dis + cent - rad, j * dis + 8)
+            circleMiddle2 = (i * dis + dis - rad * 2, j * dis + 8)
+            pygame.draw.circle(superf, (0, 0, 0), circleMiddle, rad)
+            pygame.draw.circle(superf, (0, 0, 0), circleMiddle2, rad)
 
 class snake(object):
     #A list for the blocks (cubo) in the body; a dictionary for the turns
@@ -85,7 +100,11 @@ class snake(object):
         pass
 
     def draw(self, superf):
-        pass
+        for i, c in enumerate(self.body):
+            if i == 0:
+                c.draw(superf, True)
+            else:
+                c.draw(superf)
 
 
 def drawGrid(w, filas, superf):
@@ -100,8 +119,9 @@ def drawGrid(w, filas, superf):
         # The las two tuples passed as arguments are the start position and the end position of the line
 
 def redrawVentana(superf):
-    global ancho, filas
+    global ancho, filas, s
     superf.fill((0,0,0))
+    s.draw(superf)
     drawGrid(ancho, filas, superf)
     pygame.display.update()
 
@@ -112,7 +132,7 @@ def message_box(tema, contenido):
     pass
 
 def main():
-    global ancho, filas
+    global ancho, filas, s
     ancho = 500
     filas = 20
     win = pygame.display.set_mode((ancho, ancho))
