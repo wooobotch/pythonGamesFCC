@@ -20,7 +20,7 @@ class cubo(object):
     def move(self, dirnx, dirny):
         self.dirnx = dirnx
         self.dirny = dirny
-        self.pos(self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
+        self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
     def draw(self, superf, eyes = False):
         dis = self.w // self.rows
@@ -74,7 +74,7 @@ class snake(object):
 
             #The next block iterates over the snake's body, moving each cube individually and removing the last one
             # in order to prevent the snake from increasing it's length
-            for i, c in enumerate(self.cuerpo)
+            for i, c in enumerate(self.cuerpo):
                 p = c.pos[:]
                 if p in self.vueltas:
                     vuelta = self.vueltas[p]
@@ -94,10 +94,26 @@ class snake(object):
                         c.move(c.dirnx, c.dirny)
 
     def reset(self, pos):
-        pass
+        self.head = cubo(pos)
+        self.body = []
+        self.body.append(self.head)
+        self.vueltas = {}
+        self.dirnx = 0
+        self.dirny = 1
 
     def addCube(self):
-        pass
+        tail = self.cuerpo[-1]
+        dx, dy = tail.dirnx, tail.dirny
+        if dx == 1 and dy == 0:
+            self.body.append(cube((tail.pos[0]-1, tail.pos[1])))
+        elif dx == -1 and dy == 0:
+            self.body.append(cube((tail.pos[0]+1, tail.pos[1])))
+        elif dx == 0 and dy == 1:
+            self.body.append(cube((tail.pos[0], tail.pos[1]-1)))
+        elif dx == 0 and dy == -1:
+            self.body.append(cube((tail.pos[0], tail.pos[1]+1)))
+        self.cuerpo[-1].dirnx = dx
+        self.cuerpo[-1].dirny = dy
 
     def draw(self, superf):
         for i, c in enumerate(self.body):
@@ -119,30 +135,58 @@ def drawGrid(w, filas, superf):
         # The las two tuples passed as arguments are the start position and the end position of the line
 
 def redrawVentana(superf):
-    global ancho, filas, s
+    global ancho, filas, s, snack
     superf.fill((0,0,0))
     s.draw(superf)
+    snack.draw(superf)
     drawGrid(ancho, filas, superf)
     pygame.display.update()
 
-def comida(filas, items):
-    pass
+def comida(filas, item):
+    posiciones = item.body
+    while True:
+        x = random.randrange(filas)
+        y = random.randrange(filas)
+        if len(list(filter(lambda z:z.pos == (x,y), posiciones))) > 0:
+            continue
+        else:
+            break
+    return (x, y)
 
 def message_box(tema, contenido):
-    pass
+    root = tk.Tk()
+    root.attributes("-topmost", True)
+    root.withdraw()
+    messagebx.showinfo(subject, content)
+    try:
+        root.destroy()
+    except:
+        pass
 
 def main():
-    global ancho, filas, s
+    global ancho, filas, s, snack
     ancho = 500
     filas = 20
     win = pygame.display.set_mode((ancho, ancho))
-    bicho = snake((255,0,0), (10,10))
+    s = snake((255,0,0), (10,10))
+    snack = cubo(comida(filas, s), color =(0, 255, 0))
+
     clock = pygame.time.Clock()
     flag = True
 
     while flag:
         pygame.time.delay(50)
         clock.tick(10)
-        redraVentana(win)
+        s.move()
+        if s.cuerpo[0].pos == snack.pos:
+            s.addCube()
+            snack = cubo(comida(filas, s), color =(0, 255, 0))
 
-# 00:55:20
+        for x in range(len(s.cuerpo)):
+            if s.cuerpo[x].pos in list(map(lambda z:z.pos, s.cuerpo[x+1:])):
+                print('Score: ', len(s.body))
+                message_box('You Lost!', 'Play Again!')
+                s.reset((10, 10)
+                break
+
+        redrawVentana(win)
